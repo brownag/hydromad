@@ -146,7 +146,7 @@ bucket.sim <-
         S[t] <- min(Sb, S_prev + P[t] - Eintc)
         Etrans <- M * min(1, S[t] / Sfc) * E[t]
         Ebare <- (1 - M) * (S[t] / Sb) * E[t]
-        ET[t] <- Eintc + min(S[t], Etrans + Ebare)
+        ET[t] <- ifelse(S_prev + P[t] >= E[t], E[t], Eintc + min(S[t], Etrans + Ebare))
         ## mass balance
         S[t] <- S_prev + P[t] - ET[t]
         ## drainage (saturation excess)

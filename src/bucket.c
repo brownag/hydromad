@@ -23,7 +23,13 @@ void sma_bucket(double *P, double *E, int *n, double *Sb, double *fc,
     S[t] = min(*Sb, S_prev + P[t] - Eintc);
     Etrans = *M * min(1, S[t] / *Sfc) * E[t];
     Ebare = (1 - *M) * (S[t] / *Sb) * E[t];
-    ET[t] = Eintc + min(S[t], Etrans + Ebare);
+    // AET==PET when S_prev + P[t] >= PET (no deficit if storage available)
+    if (S_prev + P[t] >= E[t]) {
+      ET[t] = E[t];
+    } else {
+      // sum AET components (or use remaining storage under deficit)
+      ET[t] = Eintc + min(S[t], Etrans + Ebare);
+    }
     // mass balance
     S[t] = S_prev + P[t] - ET[t];
     // drainage (saturation excess)
